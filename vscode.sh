@@ -34,6 +34,44 @@ error_exit() {
 }
 
 
+set_gpg_key_n_code_repo_on_ubuntu() {
+
+  info "Importing Microsoft GPG key..."
+  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/vscode.gpg
+
+  info "Creating VS Code repository file..."
+  echo "deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
+
+}
+
+
+set_gpg_key_n_code_repo_on_fedora() {
+  # Import the Microsoft GPG key
+  info "Importing Microsoft GPG key..."
+  sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+
+
+  if [ $? -ne 0 ]; then
+    error_exit "Failed to import Microsoft GPG key"
+  else
+    success "Successfully Imported Microsoft GPG key"
+  fi
+
+
+  # Creating VS Code repo
+  info "Creating VS Code repository file..."
+  sudo tee /etc/yum.repos.d/vscode.repo > /dev/null <<-'EOF'
+    [code]
+    name=Visual Studio Code
+    baseurl=https://packages.microsoft.com/yumrepos/vscode
+    enabled=1
+    gpgcheck=1
+    gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+EOF
+
+}
+
+
 install_vs_on_fedora() {
   # Clean DNF metadata and refresh cache
   warn "Cleaning DNF metadata..."
@@ -59,7 +97,6 @@ install_vs_on_ubuntu() {
 # -------------------------
 # Main process
 # -------------------------
-
 
 # Checking distro
 if [ -f /etc/os-release ]; then
@@ -94,28 +131,18 @@ info "VS Code is not found in this system. Installing..."
 info "Have patience and wait for a few moment please ... ... ..."
 
 
-# Import the Microsoft GPG key
-info "Importing Microsoft GPG key..."
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-
-
-if [ $? -ne 0 ]; then
-  error_exit "Failed to import Microsoft GPG key"
-else
-  success "Successfully Imported Microsoft GPG key"
-fi
-
-
-# Creating VS Code repo
-info "Creating VS Code repository file..."
-sudo tee /etc/yum.repos.d/vscode.repo > /dev/null << 'EOF'
-[code]
-name=Visual Studio Code
-baseurl=https://packages.microsoft.com/yumrepos/vscode
-enabled=1
-gpgcheck=1
-gpgkey=https://packages.microsoft.com/keys/microsoft.asc
-EOF
+case "$DISTRO" in
+  fedora)
+    set_gpg_key_n_code_repo_on_fedora
+#    install_vs_on_fedora
+    ;;
+  ubuntu|debian)
+    set_gpg_key_n_code_repo_on_ubuntu
+    ;;
+  *)
+    error_exit "Unsupported distro! Please use this script only on 'fedora' or 'ubuntu(debian)'"
+    ;;
+esac
 
 
 if [ $? -ne 0 ]; then
