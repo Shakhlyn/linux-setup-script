@@ -152,11 +152,11 @@ make_default_shell() {
 # Main installer sequence
 # -----------------------------------------
 install_zsh_suit() {
-#  if check_if_zsh_installed; then
-#    return 0
-#  fi
-#
-#  install_zsh
+  if check_if_zsh_installed; then
+    return 0
+  fi
+
+  install_zsh
 
   if check_if_ohmyzsh_installed; then
     return 0

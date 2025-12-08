@@ -15,6 +15,7 @@ source ./utils.sh
 source ./pycharm-community.sh
 #source ./webstorm.sh
 source ./zsh_shell.sh
+source ./golang.sh
 
 
 detect_distro
@@ -26,7 +27,12 @@ fi
 # Making the 'distro' variable available to all the scripts that are imported here
 export DISTRO
 
-install_pycharm_community
+main() {
+  install_pycharm_community
 
-#main
-install_zsh_suit
+  install_zsh_suit
+
+  install_golang
+}
+
+main
