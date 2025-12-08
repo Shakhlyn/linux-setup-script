@@ -24,3 +24,5 @@ log_success() { echo -e "${GREEN}[SUCCESS]${RESET} $*${RESET}"; }
 log_warn()    { echo -e "${YELLOW}[WARN]${RESET}    $*${RESET}"; }
 log_error()   { echo -e "${RED}[ERROR]${RESET}   $*${RESET}"; }
 log_debug()   { [[ "$DEBUG" == "1" ]] && echo -e "${CYAN}[DEBUG]${RESET}   $*${RESET}"; }
+
+log_test()    { printf "${BLUE}[INFO]${RESET}    %b\n" "$*"; }

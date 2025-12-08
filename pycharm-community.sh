@@ -1,7 +1,6 @@
 #!/bin/bash
 
 source ./lib-logger.sh
-
 source ./utils.sh
 
 install_on_fedora() {
