@@ -17,7 +17,6 @@ check_if_go_installed() {
 
 
 install_golang() {
-  echo "hi"
   if check_if_go_installed; then
     return
   fi
@@ -31,8 +30,9 @@ install_golang() {
   wget "https://go.dev/dl/${go_latest_version}.linux-amd64.tar.gz" -O /tmp/go.tar.gz
 
   if [[ "$?" -ne 0 ]]; then
-    log_warn "Something went wrong. Couldn't download the tarball"]
-    return 1
+#    log_warn "Something went wrong. Couldn't download the tarball"]
+#    return 1
+    error_exit "Something went wrong. Couldn't download the tarball"
   fi
 
 

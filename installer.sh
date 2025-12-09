@@ -13,7 +13,7 @@ source ./utils.sh
 # -------------------------------
 #source ./vscode.sh
 source ./pycharm-community.sh
-#source ./webstorm.sh
+source ./webstorm.sh
 source ./zsh_shell.sh
 source ./golang.sh
 
@@ -30,9 +30,12 @@ export DISTRO
 main() {
   install_pycharm_community
 
+  install_webstorm
+
   install_zsh_suit
 
   install_golang
+  
 }
 
 main
