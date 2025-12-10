@@ -12,6 +12,7 @@ source ./utils.sh
 # Importing installation scripts
 # -------------------------------
 #source ./vscode.sh
+source ./browser.sh
 source ./pycharm-community.sh
 source ./webstorm.sh
 source ./zsh_shell.sh
@@ -28,13 +29,23 @@ fi
 export DISTRO
 
 main() {
-  install_pycharm_community
+    log_info "Refreshing the local list of available software packages from online repositories..."
+    sudo apt update
+    if [[ "$?" -ne 0 ]]; then
+        error_exit "Some thing went wrong. Check internet connection. Please try again later\n"
+    else
+        printf "\n\n"
+    fi
 
-  install_webstorm
+    install_browsers
 
-  install_zsh_suit
+    install_pycharm_community
 
-  install_golang
+    install_webstorm
+
+    install_zsh_suit
+
+    install_golang
   
 }
 
