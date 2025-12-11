@@ -60,7 +60,7 @@ check_if_webstorm_installed() {
 }
 
 
-install_on_ubuntu() {
+install_webstorm_on_ubuntu() {
     log_info "Installing Webstorm...\n"
     sudo snap install "$APP_NAME" --classic
     if [[ "$?" -eq 0 ]]; then
@@ -76,7 +76,7 @@ install_webstorm() {
     if check_if_snap_installed; then
         if check_if_snapd_is_running; then
             if check_if_webstorm_installed; then
-                if install_on_ubuntu; then
+                if install_webstorm_on_ubuntu; then
                     return 0
                 fi
             fi
