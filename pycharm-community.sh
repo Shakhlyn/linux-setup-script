@@ -15,7 +15,7 @@ install_pycharm_community() {
     local pycharm="pycharm-community"
 
     if is_installed "$pycharm"; then
-        log_info"Hurrah! $pycharm is already installed in this system"
+        log_info "Hurrah! $pycharm is already installed in this system"
         log_info "You can launch it using 'pycharm-community'"
         log_warn "Concluding this process since there is no need to install again"
         
