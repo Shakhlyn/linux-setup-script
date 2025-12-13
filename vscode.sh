@@ -35,7 +35,6 @@ error_exit() {
 
 
 set_gpg_key_n_code_repo_on_ubuntu() {
-
   info "Importing Microsoft GPG key..."
   wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/vscode.gpg
 
