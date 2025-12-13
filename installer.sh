@@ -15,6 +15,7 @@ source ./utils.sh
 source ./browser.sh
 source ./pycharm-community.sh
 source ./webstorm.sh
+source ./vscode.sh
 source ./zsh_shell.sh
 source ./golang.sh
 
@@ -42,6 +43,8 @@ main() {
     install_pycharm_community
 
     install_webstorm
+
+    install_vs_code
 
     install_zsh_suit
 
