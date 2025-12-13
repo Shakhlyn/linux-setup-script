@@ -8,27 +8,16 @@ source ./utils.sh
 
 set -euo pipefail # Exit immediately if a command fails
 
-#=============================================================================================
-
-is_browser_installed() {
-    browser="$1"
-    browser_name="$2"
-    if command -v "$browser" >/dev/null 2>&1; then
-        log_info "$browser_name browser is already installed in your system."
-        return 0
-    else
-        log_info "Couldn't find $browser_name in your system"
-        return 1
-    fi
-}
 
 #============================================================================================
 
 brave_on_ubuntu() {
-    if ! is_browser_installed "brave-browser" "Brave"; then
-        log_info "Starting the procedure for installing Brave on your system...\n"
-    else
+    if is_installed "brave-browser"; then
+        log_info "Brave browser is already installed in your system."
         return 0
+    else
+        log_info "Couldn't find Brave in your system"
+        log_info "Starting the procedure for installing Brave on your system...\n"
     fi
 
     log_info "Installing the required dependencies..."
@@ -107,10 +96,12 @@ install_brave() {
 #=============================================================================================
 
 chrome_on_ubuntu() {
-    if ! is_browser_installed "google-chrome-stable" "Chrome"; then
-        log_info "Starting the procedure for installing Brave on your system...\n"
-    else
+    if is_installed "google-chrome-stable"; then
+        log_info "Google Chrome is already installed in your system."
         return 0
+    else
+        log_info "Couldn't find Google Chrome in your system"
+        log_info "Starting the procedure for installing Google Chrome on your system...\n"
     fi
 
     log_info "Downloading the deb package..."
