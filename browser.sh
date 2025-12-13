@@ -39,7 +39,7 @@ brave_on_ubuntu() {
 
     if [[ "$?" -ne 0 ]]; then
         printf "\n"
-        log_error "Something went wrong. Check internet connection. Please try again later\n\n"
+        log_error "Something went wrong. Check internet connection. Please try again later\n"
     else
         log_success "Successfully installed Brave browser!!!\n"
         printf "\n"
@@ -72,7 +72,7 @@ install_brave() {
     case "$DISTRO" in
     ubuntu|debian)
         if brave_on_ubuntu; then
-            log_info "You can run brave by typing 'brave-browser' in the terminal.\n\n"
+            log_info "You can run brave by typing 'brave-browser' in the terminal.\n"
             return 0
         else
             return 1
@@ -80,7 +80,7 @@ install_brave() {
         ;;
     fedora)
         if brave_on_fedora; then
-            log_info "You can run Chrome by typing 'google-chrome-stable' in the terminal\n\n"
+            log_info "You can run Chrome by typing 'google-chrome-stable' in the terminal\n"
             return 0
         else
             return 1
@@ -127,7 +127,7 @@ install_chrome () {
     case "$DISTRO" in
     ubuntu|debian)
         if chrome_on_ubuntu; then
-            log_info "You can run Chrome by typing 'google-chrome-stable' in the terminal\n\n"
+            log_info "You can run Chrome by typing 'google-chrome-stable' in the terminal\n"
             return 0
         else
             return 1
@@ -135,7 +135,7 @@ install_chrome () {
         ;;
     fedora)
         if brave_on_fedora; then
-            log_info "You can run Chrome by typing 'google-chrome-stable' in the terminal\n\n"
+            log_info "You can run Chrome by typing 'google-chrome-stable' in the terminal\n"
             return 0
         else
             return 1

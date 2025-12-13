@@ -125,7 +125,7 @@ configure_zshrc() {
 
   sed -i 's/^plugins=(\(.*\))/plugins=(\1 zsh-autosuggestions zsh-syntax-highlighting)/' ~/.zshrc
 
-  log_success "Added plugins to ~/.zshrc\n\n"
+  log_success "Added plugins to ~/.zshrc\n"
 }
 
 

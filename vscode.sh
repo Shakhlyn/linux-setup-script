@@ -14,7 +14,7 @@ source ./utils.sh
 set_gpg_key_n_code_repo_on_ubuntu() {
     log_info "Importing Microsoft GPG key..."
     if ! wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/vscode.gpg; then
-        log_error "Failed to import Microsoft GPG key\n\n"
+        log_error "Failed to import Microsoft GPG key\n"
         return 1
     else
         log_success "Successfully Imported Microsoft GPG key"
@@ -24,7 +24,7 @@ set_gpg_key_n_code_repo_on_ubuntu() {
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list
 
     if [ $? -ne 0 ]; then
-        log_error"Failed to create the repo\n\n"
+        log_error"Failed to create the repo\n"
         return 1
     else
         log_success "Successfully created the vs code repo"
@@ -39,7 +39,7 @@ set_gpg_key_n_code_repo_on_fedora() {
 
 
     if [ $? -ne 0 ]; then
-        log_error "Failed to import Microsoft GPG key\n\n"
+        log_error "Failed to import Microsoft GPG key\n"
         return 1
     else
         log_success "Successfully Imported Microsoft GPG key"
@@ -58,7 +58,7 @@ set_gpg_key_n_code_repo_on_fedora() {
 EOF
 
     if [ $? -ne 0 ]; then
-        log_error"Failed to create the repo\n\n"
+        log_error"Failed to create the repo\n"
         return 1
     else
         log_success "Successfully created the vs code repo"
@@ -95,7 +95,7 @@ install_vs_code() {
     if is_installed "code"; then
         log_success "Hurrah! VS Code is already installed in this system"
         log_info "You can launch it using 'code'"
-        log_info "Exiting the process since there is no need to install again\n\n"
+        log_info "Exiting the process since there is no need to install again\n"
         return 0
     fi
 
@@ -115,7 +115,7 @@ install_vs_code() {
             fi
             ;;
         *)
-            log_error "Unsupported distro! Please use this script only on 'fedora' or 'ubuntu(debian)'\n\n"
+            log_error "Unsupported distro! Please use this script only on 'fedora' or 'ubuntu(debian)'\n"
             return 1
             ;;
     esac
@@ -129,18 +129,18 @@ install_vs_code() {
             install_vs_on_ubuntu
             ;;
         *)
-            log_error "Unsupported distro! Please use this script only on 'fedora' or 'ubuntu(debian)'\n\n"
+            log_error "Unsupported distro! Please use this script only on 'fedora' or 'ubuntu(debian)'\n"
             return 1
           ;;
     esac
 
 
     if [ "$?" -ne 0 ]; then
-        log_error "Installation failed. Please check your network or repo setting first, then try again.\n\n"
+        log_error "Installation failed. Please check your network or repo setting first, then try again.\n"
         return 1
     else
         log_success "Installation Complete!"
-        log_info "Now you can launch VS code using: 'code'\n\n"
+        log_info "Now you can launch VS code using: 'code'\n"
     fi
 }
 
