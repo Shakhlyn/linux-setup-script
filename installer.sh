@@ -15,6 +15,7 @@ source ./utils.sh
 source ./browser.sh
 source ./pycharm-community.sh
 source ./webstorm.sh
+source ./vscode.sh
 source ./zsh_shell.sh
 source ./golang.sh
 
@@ -36,17 +37,26 @@ main() {
     else
         printf "\n\n"
     fi
+    script_divider
 
     install_browsers
+    script_divider
 
     install_pycharm_community
+    script_divider
 
     install_webstorm
+    script_divider
+
+    install_vs_code
+    script_divider
 
     install_zsh_suit
+    script_divider
 
     install_golang
-  
+    script_divider
+
 }
 
 main

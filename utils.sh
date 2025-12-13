@@ -16,3 +16,4 @@ error_exit() {
   log_error "$1" >&2
   exit 1
 }
+
