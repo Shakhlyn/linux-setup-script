@@ -11,13 +11,27 @@ source ./utils.sh
 # -------------------------------
 # Importing installation scripts
 # -------------------------------
-#source ./vscode.sh
+
+: <<'NOTE'
+
+# IMPORTANT NOTE:
+#
+# Although we have grouped the scripts in similar directories,
+# we have imported individual scripts. The main reason is that
+# in a later stage, the users will have the option to select
+# the items they want to install.
+#
+NOTE
+
 source ./browser.sh
-source ./pycharm-community.sh
-source ./webstorm.sh
-source ./vscode.sh
+
+source ./ides/pycharm-community.sh
+source ./ides/webstorm.sh
+source ./ides/vscode.sh
+
+source ./prog_lang/golang.sh
+
 source ./zsh_shell.sh
-source ./golang.sh
 
 
 detect_distro
@@ -56,7 +70,6 @@ main() {
 
     install_golang
     script_divider
-
 }
 
 main
