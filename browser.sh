@@ -6,7 +6,7 @@
 source ./lib-logger.sh
 source ./utils.sh
 
-set -euo pipefail # Exit immediately if a command fails
+set -uo pipefail # Exit immediately if a command fails
 
 
 #============================================================================================
