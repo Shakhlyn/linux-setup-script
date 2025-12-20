@@ -5,51 +5,67 @@ source ./lib-logger.sh
 source ./utils.sh
 
 
-check_if_go_installed() {
-  if command -v go &> /dev/null; then
-    log_info "Go is already installed in your system. Version: $(go version)\n"
-    return 0
+know_go_latest_version() {
+    if go_latest_version=$(curl -s https://go.dev/VERSION?m=text | head -n 1);then
+        log_info "Latest Go version: $go_latest_version\n"
+    else
+        log_warn "Cannot find what is the latest version of Go!"
+        return 1
+    fi
+}
 
-  else
-    return 1
-  fi
+
+download_tarball() {
+    wget "https://go.dev/dl/${go_latest_version}.linux-amd64.tar.gz" -O /tmp/go.tar.gz
+
+    if [[ "$?" -ne 0 ]]; then
+        log_warn "Something went wrong. Couldn't download the tarball"]
+        return 1
+    fi
+
+    log_info "Downloaded the tarball of Go"
+}
+
+
+adding_path_if_not_in_zshrc() {
+    if ! grep -q 'export PATH=$PATH:/usr/local/go/bin' ~/.zshrc; then
+        log_info "\nAdding Go to the PATH in ~/.zshrc\n"
+        echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.zshrc
+    else
+        log_info "\nPath is already in the .zshrc file. Skipping re-writing...\n"
+        return 0
+    fi
 }
 
 
 install_golang() {
-  if check_if_go_installed; then
-    return
-  fi
+    if is_installed 'go'; then
+        log_info "Go is already installed in your device. Version: $(go version)"
+        return 0
+    fi
 
-  log_info "Installing the latest version of Go...\n"
+    log_info "Go is not installed in your system. Installing the latest version of Go...\n"
 
-  go_latest_version=$(curl -s https://go.dev/VERSION?m=text | head -n 1)
-  log_info "Latest Go version: $go_latest_version\n"
+    if ! know_go_latest_version; then
+        return 1
+    fi
 
-  log_info "Downloading the tarball"
-  wget "https://go.dev/dl/${go_latest_version}.linux-amd64.tar.gz" -O /tmp/go.tar.gz
+    log_info "Downloading the tarball"
+    if ! download_tarball; then
+        return 1
+    fi
 
-  if [[ "$?" -ne 0 ]]; then
-#    log_warn "Something went wrong. Couldn't download the tarball"]
-#    return 1
-    error_exit "Something went wrong. Couldn't download the tarball"
-  fi
+    # Remove any previous Go installation
+    sudo rm -rf /usr/local/go
 
+    # Extract to /usr/local
+    sudo tar -C /usr/local -xzf /tmp/go.tar.gz
 
-  # Remove any previous Go installation
-  sudo rm -rf /usr/local/go
+    # Add Go to PATH if not already in ~/.zshrc
+    adding_path_if_not_in_zshrc
 
-  # Extract to /usr/local
-  sudo tar -C /usr/local -xzf /tmp/go.tar.gz
+    # Apply changes
+    log_success "Go has been installed successfully!"
 
-  # Add Go to PATH if not already in ~/.zshrc
-  log_info "\nAdding Go to the PATH in ~/.zshrc\n"
-  if ! grep -q 'export PATH=$PATH:/usr/local/go/bin' ~/.zshrc; then
-      echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.zshrc
-  fi
-
-  # Apply changes
-  log_success "Go has been installed successfully!"
-
-  log_info "Open a new terminal or run: source ~/.zshrc"
+    log_info "Open a new terminal or run: source ~/.zshrc"
 }

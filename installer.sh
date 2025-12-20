@@ -31,7 +31,7 @@ source ./ides/vscode.sh
 
 source ./prog_lang/golang.sh
 
-source ./zsh_shell.sh
+source ./utility-tools/zsh_shell.sh
 
 
 detect_distro

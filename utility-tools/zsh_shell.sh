@@ -12,16 +12,6 @@ source ./lib-logger.sh
 source ./utils.sh
 
 
-check_if_zsh_installed() {
-  log_info "Checking if zsh already installed..."
-  if command -v zsh >/dev/null 2>&1; then
-    log_info "ZSH is already installed in this device\n"
-    return 0
-  else
-    return 1
-  fi
-}
-
 check_if_ohmyzsh_installed() {
   if [ -d "$HOME/.oh-my-zsh" ]; then
     log_info "Oh My Zsh is already installed. Skipping.\n"
@@ -152,7 +142,8 @@ make_default_shell() {
 # Main installer sequence
 # -----------------------------------------
 install_zsh_suit() {
-  if check_if_zsh_installed; then
+  if is_installed "zsh"; then
+    log_info "ZSH is already installed in your system. Skipping re-installation..."
     return 0
   fi
 
