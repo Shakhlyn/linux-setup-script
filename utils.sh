@@ -2,14 +2,32 @@
 
 source ./lib-logger.sh
 
-# Check if it is already installed
-#is_installed() {
-#    if command -v "$1" >/dev/null 2>&1; then
-#        return 0
-#    else
-#        return 1
-#    fi
-#}
+
+generate_log_files() {
+    log_info "Setting up log directory and files..."
+
+    # Check and create logs directory if it doesn't exist
+    if [[ ! -d "$LOGS_DIR" ]]; then
+        if ! mkdir -p "$LOGS_DIR"; then
+            log_info "Failed to create logs directory: $LOGS_DIR"
+            exit 1
+        fi
+        log_info "Created logs directory: $LOGS_DIR"
+    else
+        log_info "Logs directory already exists: $LOGS_DIR"
+    fi
+
+    # Initialize (truncate/create) each log file
+    for log_file in "${LOG_FILES[@]}"; do
+        if ! : > "$log_file"; then
+            log_info "Failed to initialize log file: $log_file"
+            exit 1
+        fi
+        log_info "Ready: $log_file"
+    done
+
+    log_info "All log files are ready in $LOGS_DIR"
+}
 
 
 is_installed() {

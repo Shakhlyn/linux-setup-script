@@ -13,7 +13,7 @@ set -uo pipefail # Exit immediately if a command fails
 
 brave_on_ubuntu() {
     if is_installed "brave-browser"; then
-        log_info "Brave browser is already installed in your system."
+        log_confirm "Brave browser is already installed in your system."
         return 0
     else
         log_info "Couldn't find Brave in your system"
@@ -35,7 +35,7 @@ brave_on_ubuntu() {
     printf "\n"
 
     log_info "Installing Brave browser...\n"
-    sudo apt install brave-browser
+    sudo apt install brave-browser -y
 
     if [[ "$?" -ne 0 ]]; then
         printf "\n"
@@ -87,7 +87,7 @@ install_brave() {
         fi
         ;;
     *)
-        log_warn "Unsupported distribution: $DISTRO"
+        log_error "Unsupported distribution: $DISTRO"
         return 1
         ;;
     esac
@@ -97,7 +97,7 @@ install_brave() {
 
 chrome_on_ubuntu() {
     if is_installed "google-chrome-stable"; then
-        log_info "Google Chrome is already installed in your system."
+        log_confirm "Google Chrome is already installed in your system."
         return 0
     else
         log_info "Couldn't find Google Chrome in your system"
@@ -146,8 +146,6 @@ install_chrome () {
         return 1
         ;;
     esac
-
-
 }
 
 #=============================================================================================

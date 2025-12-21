@@ -98,8 +98,6 @@ yarn-error.log*
 .npm
 .yarn/
 .pnpm-store/
-*.log
-logs/
 .env
 .env.local
 .env.*.local
@@ -176,6 +174,9 @@ Cargo.lock
 # Logs and Temporary Files
 # ------------------------
 *.log
+log
+logs
+log/
 logs/
 *.tmp
 *.temp

@@ -40,7 +40,7 @@ adding_path_if_not_in_zshrc() {
 
 install_golang() {
     if is_installed 'go'; then
-        log_info "Go is already installed in your device. Version: $(go version)"
+        log_confirm "Go is already installed in your device. Version: $(go version)"
         return 0
     fi
 

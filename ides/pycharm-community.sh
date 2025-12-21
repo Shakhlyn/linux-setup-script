@@ -15,7 +15,7 @@ install_pycharm_community() {
     local pycharm="pycharm-community"
 
     if is_installed "$pycharm"; then
-        log_info "Hurrah! $pycharm is already installed in this system"
+        log_confirm "Hurrah! $pycharm is already installed in this system"
         log_info "You can launch it using 'pycharm-community'"
         log_warn "Concluding this process since there is no need to install again"
         
@@ -40,9 +40,11 @@ install_pycharm_community() {
     esac
 
 
-    if [ $? -ne 0 ]; then
-    log_error "Installation failed. Please check your network or repo setting first, then try again.\n\n"
+    if [ "$?" -ne 0 ]; then
+        log_error "Installation failed. Please check your network or repo setting first, then try again.\n\n"
+        return 1
     else
-    log_success "Pycharm community Installation Complete!\n\n"
+        log_success "Pycharm community Installation Complete!\n\n"
+        return 0
     fi
 }

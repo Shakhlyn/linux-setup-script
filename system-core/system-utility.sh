@@ -16,7 +16,7 @@ PACKAGES=(curl wget build-essential ca-certificates)
 install_system_utilities() {
     for pkg in "${PACKAGES[@]}"; do
         if is_installed "$pkg"; then
-            log_info "$pkg is already installed. Skipping re-installation..."
+            log_confirm "$pkg is already installed. Skipping re-installation..."
         else
             log_info "Updating package lists..."
             update_apt

@@ -14,7 +14,7 @@ source ./utils.sh
 
 check_if_ohmyzsh_installed() {
   if [ -d "$HOME/.oh-my-zsh" ]; then
-    log_info "Oh My Zsh is already installed. Skipping.\n"
+    log_confirm "Oh My Zsh is already installed. Skipping.\n"
     return 0
   else
     return 1
@@ -45,7 +45,7 @@ info
 #      sudo pacman -Sy --noconfirm zsh git wget
 #      ;;
     *)
-      log_warn "Unsupported distribution: $DISTRO"
+      log_error "Unsupported distribution: $DISTRO"
       return 1
       ;;
   esac
@@ -143,7 +143,7 @@ make_default_shell() {
 # -----------------------------------------
 install_zsh_suit() {
   if is_installed "zsh"; then
-    log_info "ZSH is already installed in your system. Skipping re-installation..."
+    log_confirm "ZSH is already installed in your system. Skipping re-installation..."
     return 0
   fi
 

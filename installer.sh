@@ -35,6 +35,24 @@ source ./prog_lang/golang.sh
 
 source ./utility-tools/zsh_shell.sh
 
+#===================================================
+# Defining all the log files in one place
+#===================================================
+
+# Define logs directory (simple relative path)
+LOGS_DIR="./logs"
+
+declare -A LOG_FILES
+
+LOG_FILES[log]="${LOGS_DIR}/script.log"
+LOG_FILES[success]="${LOGS_DIR}/success.log"
+LOG_FILES[error]="${LOGS_DIR}/error.log"
+
+export LOG_FILES
+
+#===================================================
+# Core functionalities
+#===================================================
 
 detect_distro
 
@@ -45,7 +63,10 @@ fi
 # Making the 'distro' variable available to all the scripts that are imported here
 export DISTRO
 
+
 main() {
+    generate_log_files
+
     log_info "Refreshing the local list of available software packages from online repositories..."
 
     update_apt

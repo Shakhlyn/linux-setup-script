@@ -20,7 +20,7 @@ check_if_snap_installed() {
             error_exit "Couldn't install snap. Check your internet connection. Try again later."
         fi
     else
-        log_info "snap is already installed in your system."
+        log_confirm "snap is already installed in your system."
         return 0
     fi
 }
@@ -33,7 +33,8 @@ check_if_snapd_is_running() {
             log_success "Snapd service is activated"
             return 0
         else
-            error_exit "Couldn't activate the snapd service! Please try again later"
+            log_warn "Couldn't activate the snapd service! Please try again later"
+            return 1
         fi
     else
         log_info "Snapd service is active."
@@ -44,7 +45,7 @@ check_if_snapd_is_running() {
 check_if_webstorm_installed() {
     if sudo snap list | grep -q "^$APP_NAME "; then
         INSTALLED_VERSION=$(snap list | awk "/^$APP_NAME / {print \$2}")
-        log_info "$APP_NAME is already installed (version: $INSTALLED_VERSION)."
+        log_confirm "$APP_NAME is already installed (version: $INSTALLED_VERSION)."
 
         read -r -p "Re-install/Update Webstorm? (Y/N): " ANSWER
 
@@ -67,7 +68,8 @@ install_webstorm_on_ubuntu() {
         log_success "Webstorm is installed successfully!!!"
         return 0
     else
-        error_exit "Something went wrong"
+        log_Error "Couldn't install $APP_NAME. Something went wrong"
+        return 1
     fi
 }
 

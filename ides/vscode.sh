@@ -17,7 +17,7 @@ set_gpg_key_n_code_repo_on_ubuntu() {
         log_error "Failed to import Microsoft GPG key\n"
         return 1
     else
-        log_success "Successfully Imported Microsoft GPG key"
+        log_info "Successfully Imported Microsoft GPG key"
     fi
 
     log_info "Creating VS Code repository file..."
@@ -27,7 +27,7 @@ set_gpg_key_n_code_repo_on_ubuntu() {
         log_error"Failed to create the repo\n"
         return 1
     else
-        log_success "Successfully created the vs code repo"
+        log_info "Successfully created the vs code repo"
     fi
 }
 
@@ -42,7 +42,7 @@ set_gpg_key_n_code_repo_on_fedora() {
         log_error "Failed to import Microsoft GPG key\n"
         return 1
     else
-        log_success "Successfully Imported Microsoft GPG key"
+        log_info "Successfully Imported Microsoft GPG key"
     fi
 
 
@@ -61,7 +61,7 @@ EOF
         log_error"Failed to create the repo\n"
         return 1
     else
-        log_success "Successfully created the vs code repo"
+        log_info "Successfully created the vs code repo"
     fi
 }
 
@@ -93,7 +93,7 @@ install_vs_on_ubuntu() {
 
 install_vs_code() {
     if is_installed "code"; then
-        log_info "Hurrah! VS Code is already installed in this system"
+        log_confirm "Hurrah! VS Code is already installed in this system"
         log_info "You can launch it using 'code'"
         log_info "Exiting the process since there is no need to install again\n"
         return 0

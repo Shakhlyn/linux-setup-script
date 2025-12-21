@@ -10,12 +10,11 @@ detect_distro() {
     if [ -f /etc/os-release ]; then
         . /etc/os-release
         DISTRO=$ID
-#        echo "$DISTRO"
         log_info "You are using: $DISTRO distro"
         return 0
     else
         log_info "Only Ubuntu, Lubuntu, and Fedora are supported"
-        return 1
+        exit 1
     fi
 }
 
