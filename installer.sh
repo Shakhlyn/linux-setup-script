@@ -23,6 +23,8 @@ source ./utils.sh
 #
 NOTE
 
+source ./system-core/system-utility.sh
+
 source ./browser.sh
 
 source ./ides/pycharm-community.sh
@@ -45,12 +47,11 @@ export DISTRO
 
 main() {
     log_info "Refreshing the local list of available software packages from online repositories..."
-    sudo apt update
-    if [[ "$?" -ne 0 ]]; then
-        error_exit "Some thing went wrong. Check internet connection. Please try again later\n"
-    else
-        printf "\n\n"
-    fi
+
+    update_apt
+    script_divider
+
+    install_system_utilities
     script_divider
 
     install_browsers

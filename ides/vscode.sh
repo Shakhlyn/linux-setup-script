@@ -93,7 +93,7 @@ install_vs_on_ubuntu() {
 
 install_vs_code() {
     if is_installed "code"; then
-        log_success "Hurrah! VS Code is already installed in this system"
+        log_info "Hurrah! VS Code is already installed in this system"
         log_info "You can launch it using 'code'"
         log_info "Exiting the process since there is no need to install again\n"
         return 0

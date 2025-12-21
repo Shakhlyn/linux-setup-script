@@ -48,6 +48,22 @@ is_installed() {
 }
 
 
+update_apt() {
+    local retries=5
+    local delay=5
+    local count=0
+
+    while ! sudo apt update -qq; do
+        count=$((count + 1))
+        if [[ $count -ge $retries ]]; then
+            error_exit "Error: 'apt update' failed after $retries attempts." >&2
+        fi
+        log_error "apt update failed (attempt $count/$retries). Retrying in $delay seconds..."
+        sleep $delay
+    done
+}
+
+
 error_exit() {
   log_error "$1" >&2
   exit 1
