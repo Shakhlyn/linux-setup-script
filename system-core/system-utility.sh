@@ -11,7 +11,7 @@ source ./utils.sh
 
 set -uo pipefail
 
-PACKAGES=(curl wget build-essential ca-certificates)
+PACKAGES=(curl wget build-essential ca-certificates software-properties-common)
 
 install_system_utilities() {
     for pkg in "${PACKAGES[@]}"; do

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Should be installed in the later phase; after installing the programming languages(pip is required, which requires python)
 # quality-of-life tools: htop', neofetch', strace', tree', ripgrep', fdk-find', fzf', bat', thefuck'
 
 set -u

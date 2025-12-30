@@ -71,5 +71,5 @@ log_confirm() { _log "CONFIRM" "$CYAN"   "$*"; }
 
 
 script_divider() {
-    echo -e "${PURPLE}      ================================      ${RESET}\n\n\n";
+    echo -e "${PURPLE}      ================================      ${RESET}\n\n";
 }

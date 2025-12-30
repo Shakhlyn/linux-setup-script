@@ -67,7 +67,7 @@ export DISTRO
 main() {
     generate_log_files
 
-    log_info "Refreshing the local list of available software packages from online repositories..."
+    log_info "\nRefreshing the local list of available software packages from online repositories...\n"
 
     update_apt
     script_divider
