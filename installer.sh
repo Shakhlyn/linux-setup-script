@@ -32,8 +32,10 @@ source ./ides/webstorm.sh
 source ./ides/vscode.sh
 
 source ./prog_lang/golang.sh
+source ./prog_lang/python-dev/main.sh
 
 source ./utility-tools/zsh_shell.sh
+
 
 #===================================================
 # Defining all the log files in one place
@@ -91,6 +93,9 @@ main() {
     script_divider
 
     install_golang
+    script_divider
+
+    setup_python_dev_env
     script_divider
 }
 
