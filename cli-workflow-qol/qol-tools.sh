@@ -89,6 +89,36 @@ apt_install postgresql-client psql
 apt_install strace
 apt_install thefuck fuck
 
+
+TOOLS=(
+    "htop              htop"
+    "tree              tree"
+    "ripgrep           rg"
+    "fd-find           fd"
+    "bat               batcat"
+    "fzf               fzf"
+    "jq                jq"
+    "httpie            http"
+    "neofetch          neofetch"
+    "redis-tools       redis-cli"
+    "postgresql-client psql"
+    "strace            strace"
+    "thefuck           fuck"
+)
+
+log "Installing command-line tools..."
+update_apt
+
+for entry in "${TOOLS[@]}"; do
+    read -r pkg cmd <<< "$entry"
+#    It takes the content of the variable $entry, splits it on whitespace (spaces, tabs),
+#    and assigns the resulting words to the variables pkg and cmd.
+
+    apt_install "$pkg" "$cmd"
+done
+
+log_success "Tool installation complete!"
+
 # ---------- LazyGit ----------
 if command_exists lazygit; then
     warn "lazygit already installed"
