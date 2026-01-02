@@ -31,8 +31,8 @@ source ./ides/pycharm-community.sh
 source ./ides/webstorm.sh
 source ./ides/vscode.sh
 
-source ./prog_lang/golang.sh
-source ./prog_lang/python-dev/main.sh
+source ./prog-lang/golang.sh
+source ./prog-lang/python-dev/main.sh
 
 source ./utility-tools/zsh_shell.sh
 

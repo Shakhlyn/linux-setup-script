@@ -41,7 +41,6 @@ is_installed() {
 
     log_info "Checking for $target ..."
 
-    # Try different methods
     if command -v "$target" &> /dev/null; then
         log_info "Found in PATH: $(command -v "$target")"
         return 0
@@ -104,5 +103,24 @@ apt_install() {
     fi
 
     echo ""
-    log_success "$pkg Installation complete!\n"
+    log_success "$pkg Installation complete\n"
 }
+
+
+get_shell_rc_file() {
+    local shell_config=""
+    local default_shell
+
+    default_shell=$(basename "$SHELL")
+
+    if [[ "$default_shell" == "zsh" ]]; then
+        shell_config="$HOME/.zshrc"
+    elif [[ "$default_shell" == "bash" ]]; then
+        shell_config="$HOME/.bashrc"
+    else
+        error_exit "Only BASH or ZSH shell can use this script."
+    fi
+
+    echo "${shell_config}"
+}
+
