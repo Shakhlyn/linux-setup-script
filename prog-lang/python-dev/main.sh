@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-source ./lib-logger.sh
+source ./utils/lib-logger.sh
 
 source ./prog-lang/python-dev/prerequisite-libs.sh
 source ./prog-lang/python-dev/pyenv.sh

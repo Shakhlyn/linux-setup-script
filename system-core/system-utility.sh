@@ -5,8 +5,8 @@
 # Checks for already installed packages and logs status clearly
 #==================================================================
 
-source ./lib-logger.sh
-source ./utils.sh
+source ./utils/lib-logger.sh
+source ./utils/utils.sh
 
 
 set -uo pipefail

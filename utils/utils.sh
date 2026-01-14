@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./lib-logger.sh
+source ./utils/lib-logger.sh
 
 
 error_exit() {

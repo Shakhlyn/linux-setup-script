@@ -1,14 +1,14 @@
 #!/bin/bash
 
-set -euo pipefail
+set -uo pipefail
 IFS=$'\n\t'
 
 # =========================
 # Script to install Visual Studio Code  (RPM version) on Fedora and Ubuntu
 # =========================
 
-source ./lib-logger.sh
-source ./utils.sh
+source ./utils/lib-logger.sh
+source ./utils/utils.sh
 
 
 set_gpg_key_n_code_repo_on_ubuntu() {

@@ -2,10 +2,11 @@
 
 set -uo pipefail
 
-source ./lib-logger.sh
-source ./utils.sh
+source ./utils/lib-logger.sh
+source ./utils/utils.sh
 
 PYTHON_VERSIONS=(3.10 3.10.14 3.12.12 3.13.11)
+GLOBAL_PYTHON_VERSION=3.12.12
 
 check_python_version_installed() {
     if pyenv versions --bare 2>/dev/null | grep -q "^${version}$"; then
@@ -15,7 +16,7 @@ check_python_version_installed() {
 
 
 set_global_python() {
-    local version="3.12.12"
+    local version="$1"
 
     if ! is_installed 'pyenv'; then
         log_error "pyenv not found in PATH"
@@ -70,7 +71,7 @@ install_python() {
     fi
 
 
-    if ! set_global_python; then
+    if ! set_global_python "${GLOBAL_PYTHON_VERSION}"; then
         return 1
     fi
 }

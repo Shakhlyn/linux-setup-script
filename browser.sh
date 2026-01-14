@@ -3,8 +3,8 @@
 # install_brave.sh
 # Script to install Brave Browser on Fedora 43
 
-source ./lib-logger.sh
-source ./utils.sh
+source ./utils/lib-logger.sh
+source ./utils/utils.sh
 
 set -uo pipefail # Exit immediately if a command fails
 

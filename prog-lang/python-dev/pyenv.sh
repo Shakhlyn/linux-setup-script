@@ -2,8 +2,8 @@
 
 set -uo pipefail
 
-source ./lib-logger.sh
-source ./utils.sh
+source ./utils/lib-logger.sh
+source ./utils/utils.sh
 
 PYENV_ROOT="${HOME}/.pyenv"
 PYENV_INSTALL_URL="https://pyenv.run"
