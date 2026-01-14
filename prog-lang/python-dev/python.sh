@@ -9,6 +9,7 @@ PYTHON_VERSIONS=(3.10 3.10.14 3.12.12 3.13.11)
 GLOBAL_PYTHON_VERSION=3.12.12
 
 check_python_version_installed() {
+    local version="$1"
     if pyenv versions --bare 2>/dev/null | grep -q "^${version}$"; then
         return 0
     fi
@@ -23,7 +24,7 @@ set_global_python() {
         return 1
     fi
 
-    if ! check_python_version_installed; then
+    if ! check_python_version_installed "${version}"; then
         log_error "Python $version is not found in your system. Please install this version first"
         return 1
     fi
