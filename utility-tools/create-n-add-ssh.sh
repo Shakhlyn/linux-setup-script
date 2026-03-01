@@ -3,8 +3,8 @@
 # ---------------------------
 # Import utils
 # ---------------------------
-source ./lib-logger.sh
-source utils.sh
+source ./utils/lib-logger.sh
+source ./utils/utils.sh
 
 
 # ---------------------------

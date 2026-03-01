@@ -1,8 +1,8 @@
 #!/bin/bash
 
 
-source ./lib-logger.sh
-source ./utils.sh
+source ./utils/lib-logger.sh
+source ./utils/utils.sh
 
 
 know_go_latest_version() {

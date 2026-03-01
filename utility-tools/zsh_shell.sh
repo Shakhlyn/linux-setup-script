@@ -8,8 +8,8 @@ set -uo pipefail
 IFS=$'\n\t'
 
 
-source ./lib-logger.sh
-source ./utils.sh
+source ./utils/lib-logger.sh
+source ./utils/utils.sh
 
 
 check_if_ohmyzsh_installed() {

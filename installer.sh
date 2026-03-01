@@ -3,9 +3,9 @@
 # -------------------------------
 # Importing utility scripts
 # -------------------------------
-source ./detect-distro.sh
-source ./lib-logger.sh
-source ./utils.sh
+source ./utils/distro.sh
+source ./utils/lib-logger.sh
+source ./utils/utils.sh
 
 
 # -------------------------------
@@ -31,9 +31,11 @@ source ./ides/pycharm-community.sh
 source ./ides/webstorm.sh
 source ./ides/vscode.sh
 
-source ./prog_lang/golang.sh
+source ./prog-lang/golang.sh
+source ./prog-lang/python-dev/main.sh
 
 source ./utility-tools/zsh_shell.sh
+
 
 #===================================================
 # Defining all the log files in one place
@@ -55,10 +57,14 @@ export LOG_FILES
 # Core functionalities
 #===================================================
 
-detect_distro
+DISTRO="$(detect_distro)"
 
-if [[ $? -eq 1 ]]; then
-  error_exit "Cannot detect your Linux distro!"
+if is_supported_distro "$DISTRO"; then
+    log_info "You are using: $DISTRO distro"
+    log_info "Proceeding with the installation..."
+    script_divider
+else
+    error_exit "Currently, $DISTRO is not supported. Please let us know your distro."
 fi
 
 # Making the 'distro' variable available to all the scripts that are imported here
@@ -92,6 +98,9 @@ main() {
     script_divider
 
     install_golang
+    script_divider
+
+    setup_python_dev_env
     script_divider
 }
 

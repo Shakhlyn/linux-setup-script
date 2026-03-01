@@ -1,7 +1,7 @@
 #!/bin/bash
 
-source ./lib-logger.sh
-source ./utils.sh
+source ./utils/lib-logger.sh
+source ./utils/utils.sh
 
 install_pycharm_on_fedora() {
     flatpak install flathub com.jetbrains.PyCharm-Community

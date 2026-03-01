@@ -1,6 +1,12 @@
 #!/bin/bash
 
-source ./lib-logger.sh
+source ./utils/lib-logger.sh
+
+
+error_exit() {
+  log_error "$1" >&2
+  exit 1
+}
 
 
 generate_log_files() {
@@ -33,9 +39,8 @@ generate_log_files() {
 is_installed() {
     local target="$1"
 
-    log_info "Checking for $target..."
+    log_info "Checking for $target ..."
 
-    # Try different methods
     if command -v "$target" &> /dev/null; then
         log_info "Found in PATH: $(command -v "$target")"
         return 0
@@ -82,8 +87,40 @@ update_apt() {
 }
 
 
-error_exit() {
-  log_error "$1" >&2
-  exit 1
+apt_install() {
+    local pkg="$1"
+    local cmd="${2:-$1}"
+
+    if is_installed "$cmd"; then
+        log_confirm "$pkg is already installed. Skipping re-installation..."
+        return 0
+    fi
+
+    log_info "Installing $pkg..."
+    if ! sudo apt install "$pkg" -y; then
+        log_error "Couldn't install $pkg. Please try again later."
+        return 1
+    fi
+
+    echo ""
+    log_success "$pkg Installation complete\n"
+}
+
+
+get_shell_rc_file() {
+    local shell_config=""
+    local default_shell
+
+    default_shell=$(basename "$SHELL")
+
+    if [[ "$default_shell" == "zsh" ]]; then
+        shell_config="$HOME/.zshrc"
+    elif [[ "$default_shell" == "bash" ]]; then
+        shell_config="$HOME/.bashrc"
+    else
+        error_exit "Only BASH or ZSH shell can use this script."
+    fi
+
+    echo "${shell_config}"
 }
 
