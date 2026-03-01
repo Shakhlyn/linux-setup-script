@@ -48,6 +48,10 @@ _log() {
     "CONFIRM")
         echo "[$timestamp] [$level] $message" >> "${LOG_FILES[log]}"
         ;;
+    "WARN") 
+        echo "[$timestamp] [$level] $message" >> "${LOG_FILES[log]}"
+        echo "[$timestamp] [$level] $message" >> "${LOG_FILES[warn]}"
+        ;;
     esac
 }
 

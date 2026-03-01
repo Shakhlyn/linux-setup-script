@@ -4,7 +4,7 @@
 # Script for Zsh + Oh My Zsh Installer
 # ====================================
 
-set -euo pipefail
+set -uo pipefail
 IFS=$'\n\t'
 
 
@@ -34,7 +34,7 @@ info
   printf "\n"
 
     case "$DISTRO" in
-    ubuntu|debian)
+    ubuntu|debian|pop)
       sudo apt update -y
       sudo apt install -y zsh wget
       ;;

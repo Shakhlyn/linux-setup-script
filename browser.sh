@@ -70,7 +70,7 @@ brave_on_fedora() {
 
 install_brave() {
     case "$DISTRO" in
-    ubuntu|debian)
+    ubuntu|debian|pop)
         if brave_on_ubuntu; then
             log_info "You can run brave by typing 'brave-browser' in the terminal.\n"
             return 0
@@ -125,7 +125,7 @@ chrome_on_ubuntu() {
 
 install_chrome () {
     case "$DISTRO" in
-    ubuntu|debian)
+    ubuntu | debian | pop)
         if chrome_on_ubuntu; then
             log_info "You can run Chrome by typing 'google-chrome-stable' in the terminal\n"
             return 0

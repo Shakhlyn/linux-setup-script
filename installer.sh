@@ -47,6 +47,7 @@ declare -A LOG_FILES
 LOG_FILES[log]="${LOGS_DIR}/script.log"
 LOG_FILES[success]="${LOGS_DIR}/success.log"
 LOG_FILES[error]="${LOGS_DIR}/error.log"
+LOG_FILES[warn]="${LOGS_DIR}/warn.log"
 
 export LOG_FILES
 
@@ -75,19 +76,19 @@ main() {
     install_system_utilities
     script_divider
 
-    install_browsers
+    install_zsh_suit
     script_divider
 
-    install_pycharm_community
+    install_browsers
     script_divider
 
     install_webstorm
     script_divider
 
-    install_vs_code
+    install_pycharm_community
     script_divider
 
-    install_zsh_suit
+    install_vs_code
     script_divider
 
     install_golang

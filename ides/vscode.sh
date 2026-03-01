@@ -109,7 +109,7 @@ install_vs_code() {
                 return 1
             fi
             ;;
-        ubuntu|debian)
+        ubuntu|debian|pop)
             if ! set_gpg_key_n_code_repo_on_ubuntu; then
                 return 1
             fi
@@ -125,7 +125,7 @@ install_vs_code() {
         fedora)
             install_vs_on_fedora
             ;;
-        ubuntu|debian)
+        ubuntu|debian|pop)
             install_vs_on_ubuntu
             ;;
         *)

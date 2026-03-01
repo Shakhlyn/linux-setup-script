@@ -30,7 +30,7 @@ install_pycharm_community() {
         fedora)
             install_pycharm_on_fedora
             ;;
-        ubuntu|debian|lubuntu)
+        ubuntu|debian|lubuntu|pop)
             install_pycharm_on_ubuntu
             ;;
         *)
