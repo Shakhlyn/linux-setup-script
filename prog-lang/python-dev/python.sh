@@ -63,7 +63,6 @@ install_python_versions() {
             log_info "Installing Python $version..."
             if pyenv install "$version"; then
                 log_success "Python $version is installed successfully"
-                # return 0
             else
                 log_error "Failed to install Python $version"
                 return 1
