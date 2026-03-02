@@ -21,6 +21,7 @@ check_python_version_installed() {
 
 set_global_python() {
     local version="$1"
+    local current_global
 
     if ! is_installed 'pyenv'; then
         log_error "pyenv not found in PATH"
@@ -32,8 +33,15 @@ set_global_python() {
         return 1
     fi
 
+    current_global=$(pyenv global 2>/dev/null)
+    if [[ "$current_global" == "${version}" ]]; then
+        log_confirm "Python $version is already set as global default. Skipping..."
+        return 0
+    fi
+
     log_info "Rehashing pyenv..."
     pyenv rehash
+
 
     log_info "Setting Python $version as global default..."
 
