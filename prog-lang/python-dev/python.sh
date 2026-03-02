@@ -5,14 +5,17 @@ set -uo pipefail
 source ./utils/lib-logger.sh
 source ./utils/utils.sh
 
-PYTHON_VERSIONS=(3.10 3.10.14 3.12.12 3.13.11)
+PYTHON_VERSIONS=(3.10.19 3.10.14 3.12.12 3.13.11)
 GLOBAL_PYTHON_VERSION=3.12.12
 
 check_python_version_installed() {
     local version="$1"
     if pyenv versions --bare 2>/dev/null | grep -q "^${version}$"; then
+        log_info "Found python ${version}!"
         return 0
     fi
+    log_info "Couldn't find the python ${version}!"
+    return 1
 }
 
 
@@ -28,6 +31,9 @@ set_global_python() {
         log_error "Python $version is not found in your system. Please install this version first"
         return 1
     fi
+
+    log_info "Rehashing pyenv..."
+    pyenv rehash
 
     log_info "Setting Python $version as global default..."
 
@@ -50,14 +56,14 @@ install_python_versions() {
     for version in "${PYTHON_VERSIONS[@]}"; do
 
         # Check if already installed
-        if check_python_version_installed; then
+        if check_python_version_installed "${version}"; then
             log_confirm "Python $version already installed"
         else
             # Install Python version
             log_info "Installing Python $version..."
             if pyenv install "$version"; then
                 log_success "Python $version is installed successfully"
-                return 0
+                # return 0
             else
                 log_error "Failed to install Python $version"
                 return 1

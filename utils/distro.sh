@@ -21,7 +21,7 @@ detect_distro() {
 is_supported_distro() {
     local distro="$1"
     case "$distro" in
-        ubuntu|lubuntu|popos|fedora) return 0 ;;
+        ubuntu|lubuntu|pop|fedora) return 0 ;;
         *) return 1 ;;
     esac
 }
