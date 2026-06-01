@@ -15,8 +15,7 @@ generate_log_files() {
     # Check and create logs directory if it doesn't exist
     if [[ ! -d "$LOGS_DIR" ]]; then
         if ! mkdir -p "$LOGS_DIR"; then
-            log_info "Failed to create logs directory: $LOGS_DIR"
-            exit 1
+            error_exit "Failed to create logs directory: $LOGS_DIR"
         fi
         log_info "Created logs directory: $LOGS_DIR"
     else
@@ -26,8 +25,7 @@ generate_log_files() {
     # Initialize (truncate/create) each log file
     for log_file in "${LOG_FILES[@]}"; do
         if ! : > "$log_file"; then
-            log_info "Failed to initialize log file: $log_file"
-            exit 1
+            error_exit "Failed to initialize log file: $log_file"
         fi
         log_info "Ready: $log_file"
     done
