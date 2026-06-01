@@ -74,6 +74,8 @@ update_apt() {
     local delay=5
     local count=0
 
+    log_info "Updating apt package indexes..."
+
     while ! sudo apt update -qq; do
         count=$((count + 1))
         if [[ $count -ge $retries ]]; then
@@ -82,6 +84,8 @@ update_apt() {
         log_error "apt update failed (attempt $count/$retries). Retrying in $delay seconds..."
         sleep $delay
     done
+
+    log_success "apt package indexes updated successfully.\n"
 }
 
 
@@ -102,6 +106,31 @@ apt_install() {
 
     echo ""
     log_success "$pkg Installation complete\n"
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# update_dnf
+# Refreshes the dnf package index with retry logic.
+# ─────────────────────────────────────────────────────────────────────────────
+ 
+update_dnf() {
+    local retries=5
+    local delay=5
+    local count=0
+ 
+    log_info "Updating dnf package cache..."
+ 
+    while ! sudo dnf makecache -q; do
+        count=$((count + 1))
+        if [[ $count -ge $retries ]]; then
+            error_exit "'dnf makecache' failed after $retries attempts. Check your internet connection."
+        fi
+        log_error "dnf makecache failed (attempt $count/$retries). Retrying in ${delay}s..."
+        sleep "$delay"
+    done
+ 
+    log_success "dnf package cache updated.\n"
 }
 
 
