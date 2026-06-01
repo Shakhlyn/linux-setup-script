@@ -156,6 +156,33 @@ apt_install() {
 
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# dnf_install <package> [binary_name]
+#
+# Fedora equivalent of apt_install.
+# ─────────────────────────────────────────────────────────────────────────────
+ 
+dnf_install() {
+    local pkg="$1"
+    local cmd="${2:-$1}"
+ 
+    if is_installed "$cmd"; then
+        log_confirm "'$pkg' is already installed. Skipping."
+        return 0
+    fi
+ 
+    log_info "Installing '$pkg' via dnf..."
+    if ! sudo dnf install -y "$pkg"; then
+        log_error "Failed to install '$pkg'. Check your internet connection and try again."
+        return 1
+    fi
+ 
+    log_success "'$pkg' installed successfully.\n"
+}
+ 
+
+
+
 get_shell_rc_file() {
     local shell_config=""
     local default_shell

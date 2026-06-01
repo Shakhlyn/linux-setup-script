@@ -12,9 +12,10 @@ install_pycharm_on_ubuntu() {
 }
 
 install_pycharm_community() {
-    local pycharm="pycharm-community"
+    local pycharm_community="pycharm-community"
+    local pycharm="pycharm"
 
-    if is_installed "$pycharm"; then
+    if is_installed "$pycharm" || is_installed "$pycharm_community"; then
         log_confirm "Hurrah! $pycharm is already installed in this system"
         log_info "You can launch it using 'pycharm-community'"
         log_warn "Concluding this process since there is no need to install again"

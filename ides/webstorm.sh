@@ -47,18 +47,11 @@ check_if_webstorm_installed() {
         INSTALLED_VERSION=$(snap list | awk "/^$APP_NAME / {print \$2}")
         log_confirm "$APP_NAME is already installed (version: $INSTALLED_VERSION)."
 
-        # read -r -p "Re-install/Update Webstorm? (Y/N): " ANSWER
-
-        # if [[ "$ANSWER" == "n" || "$ANSWER" == "N" ]]; then
-        #     log_warn "Aborted"
-        #     return 1
-        # elif [[ "$ANSWER" == "y" || "$ANSWER" == "Y" ]]; then
-        #     log_info "Removing old version..."
-        #     sudo snap remove "$APP_NAME"
-        #     return 0
-        # fi
+        return 0
     fi
-}
+
+    return 1
+    }
 
 
 install_webstorm_on_ubuntu() {
@@ -74,14 +67,14 @@ install_webstorm_on_ubuntu() {
 }
 
 
+
 install_webstorm() {
-    if check_if_snap_installed; then
-        if check_if_snapd_is_running; then
-            if check_if_webstorm_installed; then
-                if install_webstorm_on_ubuntu; then
-                    return 0
-                fi
-            fi
-        fi
+    check_if_snap_installed || return 1
+    check_if_snapd_is_running || return 1
+
+    if check_if_webstorm_installed; then
+        return 0
     fi
+
+    install_webstorm_on_ubuntu
 }
