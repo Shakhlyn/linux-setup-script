@@ -89,25 +89,6 @@ update_apt() {
 }
 
 
-apt_install() {
-    local pkg="$1"
-    local cmd="${2:-$1}"
-
-    if is_installed "$cmd"; then
-        log_confirm "$pkg is already installed. Skipping re-installation..."
-        return 0
-    fi
-
-    log_info "Installing $pkg..."
-    if ! sudo apt install "$pkg" -y; then
-        log_error "Couldn't install $pkg. Please try again later."
-        return 1
-    fi
-
-    echo ""
-    log_success "$pkg Installation complete\n"
-}
-
 
 # ─────────────────────────────────────────────────────────────────────────────
 # update_dnf
@@ -132,6 +113,47 @@ update_dnf() {
  
     log_success "dnf package cache updated.\n"
 }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# update_packages
+# Distro-aware wrapper. Call this from main.sh instead of update_apt directly.
+# ─────────────────────────────────────────────────────────────────────────────
+ 
+update_packages() {
+    case "${DISTRO:-}" in
+        ubuntu | lubuntu | pop)
+            update_apt
+            ;;
+        fedora)
+            update_dnf
+            ;;
+        *)
+            error_exit "update_packages: Unsupported distribution '${DISTRO:-unset}'."
+            ;;
+    esac
+}
+
+
+
+apt_install() {
+    local pkg="$1"
+    local cmd="${2:-$1}"
+
+    if is_installed "$cmd"; then
+        log_confirm "$pkg is already installed. Skipping re-installation..."
+        return 0
+    fi
+
+    log_info "Installing $pkg..."
+    if ! sudo apt install "$pkg" -y; then
+        log_error "Couldn't install $pkg. Please try again later."
+        return 1
+    fi
+
+    echo ""
+    log_success "$pkg Installation complete\n"
+}
+
 
 
 get_shell_rc_file() {
