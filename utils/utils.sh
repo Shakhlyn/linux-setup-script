@@ -180,7 +180,33 @@ dnf_install() {
     log_success "'$pkg' installed successfully.\n"
 }
  
+# ─────────────────────────────────────────────────────────────────────────────
+# pkg_install <package> [binary_name]
+#
+# Distro-aware install dispatcher. Calls apt_install or dnf_install based on
+# the exported DISTRO variable.
+#
+# Usage:
+#   pkg_install curl
+#   pkg_install vim-enhanced vim      # package name differs from binary name
+# ─────────────────────────────────────────────────────────────────────────────
 
+pkg_install() {
+    local pkg="$1"
+    local cmd="${2:-$1}"
+
+    case "${DISTRO:-}" in
+        ubuntu | lubuntu | pop)
+            apt_install "$pkg" "$cmd"
+            ;;
+        fedora)
+            dnf_install "$pkg" "$cmd"
+            ;;
+        *)
+            error_exit "pkg_install: Unsupported distribution '${DISTRO:-unset}'."
+            ;;
+    esac
+}
 
 
 get_shell_rc_file() {
