@@ -26,6 +26,7 @@ NOTE
 source ./system-core/system-utility.sh
 
 source ./db-clients/dbeaver-ce.sh
+source ./db-clients/postgresql-postgresql_client-and-utility.sh
 
 source ./browser.sh
 
@@ -85,6 +86,9 @@ main() {
     script_divider
 
     install_zsh_suit
+    script_divider
+
+    install_postgresql_suit
     script_divider
 
     install_dbeaver

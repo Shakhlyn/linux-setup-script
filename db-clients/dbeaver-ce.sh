@@ -5,7 +5,6 @@ set -uo pipefail
 source ./utils/lib-logger.sh
 source ./utils/utils.sh
 
-APP_NAME="dbeaver-ce"
 
 check_if_installed() {
     if command -v dbeaver &>/dev/null; then
