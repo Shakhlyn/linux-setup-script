@@ -25,6 +25,8 @@ NOTE
 
 source ./system-core/system-utility.sh
 
+source ./db-clients/dbeaver-ce.sh
+
 source ./browser.sh
 
 source ./ides/pycharm-community.sh
@@ -83,6 +85,9 @@ main() {
     script_divider
 
     install_zsh_suit
+    script_divider
+
+    install_dbeaver
     script_divider
 
     install_browsers
