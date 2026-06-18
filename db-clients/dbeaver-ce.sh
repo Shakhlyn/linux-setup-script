@@ -6,19 +6,10 @@ source ./utils/lib-logger.sh
 source ./utils/utils.sh
 
 
-check_if_installed() {
-    if command -v dbeaver &>/dev/null; then
-        log_confirm "DBeaver already installed"
-        return 0
-    fi
-    return 1
-}
-
 install_prereqs() {
     log_info "Installing prerequisites..."
-    # sudo apt update
     update_packages
-    sudo apt install -y wget gnupg ca-certificates
+    install_packages wget gnupg ca-certificates
 }
 
 add_dbeaver_repo() {
@@ -38,11 +29,11 @@ add_dbeaver_repo() {
 install() {
     log_info "Installing DBeaver CE (APT)..."
     update_packages
-    sudo apt install -y dbeaver-ce
+    install_packages dbeaver-ce
 }
 
 verify() {
-    if command -v dbeaver &>/dev/null; then
+    if is_installed dbeaver &>/dev/null; then
         log_success "DBeaver installed successfully"
         dbeaver --version || true
     else
@@ -53,7 +44,7 @@ verify() {
 
 install_dbeaver() {
     if is_installed "dbeaver"; then
-        log_info "DBeaver is already installed!"
+        log_confirm "DBeaver is already installed!"
         dbeaver --version || true
         return 0
     fi

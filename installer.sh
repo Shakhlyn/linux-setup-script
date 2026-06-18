@@ -41,6 +41,8 @@ source ./prog-lang/python-dev/main.sh
 
 source ./utility-tools/zsh_shell.sh
 
+source ./containers-devops/docker-suite.sh
+
 
 #===================================================
 # Defining all the log files in one place
@@ -100,11 +102,13 @@ main() {
 
     run_module "PYCHARM" install_pycharm_community
 
-    run_module "VS CODE" install_vs_coder
+    run_module "VS CODE" install_vs_code
 
     run_module "GOLANG" install_golang
 
     run_module "PYTHON & PYTHON_DEV_ENV" setup_python_dev_env
+
+    run_module "DOCKER SUITE" install_docker_suite
 }
 
 main
