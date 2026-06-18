@@ -134,6 +134,10 @@ update_packages() {
 }
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# install_packages for ubuntu/pop os/ lubuntu
+# ─────────────────────────────────────────────────────────────────────────────
+
 
 apt_install() {
     local pkg="$1"
@@ -154,12 +158,22 @@ apt_install() {
     log_success "$pkg Installation complete\n"
 }
 
+apt_install_multiple() {
+    local failed=()
+
+    for pkg in "$@"; do
+        apt_install "$pkg" || failed+=("$pkg")
+    done
+
+    if [ ${#failed[@]} -gt 0 ]; then
+        log_error "Failed packages: ${failed[*]}"
+        return 1
+    fi
+}
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# dnf_install <package> [binary_name]
-#
-# Fedora equivalent of apt_install.
+# dnf_install <package> [binary_name] --> for fedora
 # ─────────────────────────────────────────────────────────────────────────────
  
 dnf_install() {
@@ -181,7 +195,42 @@ dnf_install() {
 }
  
 
+dnf_install_multiple() {
+    local failed=()
 
+    for pkg in "$@"; do
+        dnf_install "$pkg" || failed+=("$pkg")
+    done
+
+    if [ ${#failed[@]} -gt 0 ]; then
+        log_error "Failed packages: ${failed[*]}"
+        return 1
+    fi
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Distro-aware wrapper. Call this from main.sh instead of update_apt directly.
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_packages() {
+    case "${DISTRO:-}" in
+        ubuntu|lubuntu|pop)
+            apt_install_multiple "$@"
+            ;;
+        fedora)
+            dnf_install_multiple "$@"
+            ;;
+        *)
+            error_exit "install_packages: Unsupported distribution '${DISTRO:-unset}'."
+            ;;
+    esac
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Shell file
+# ─────────────────────────────────────────────────────────────────────────────
 
 get_shell_rc_file() {
     local shell_config=""
