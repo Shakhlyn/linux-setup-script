@@ -56,25 +56,35 @@ verify_server() {
 }
 
 install_client_profile() {
-    apt_install postgresql-client
-    verify_client
+    if is_installed psql &>/dev/null; then
+        log_confirm "PostgreSQL client already installed. Skipping."
+        return 0
+    fi
+
+    install_packages postgresql-client || return 1
+    verify_client                      || return 1
 }
 
 install_server_profile() {
-    apt_install postgresql
-    apt_install postgresql-contrib
+    if is_installed postgresql &>/dev/null; then
+        log_confirm "PostgreSQL server already installed. Skipping."
+        return 0
+    fi
 
-    ensure_postgres_running
-    verify_server
+    install_packages postgresql             || return 1
+    install_packages postgresql-contrib     || return 1
+
+    ensure_postgres_running                 || return 1
+    verify_server                           || return 1
 }
 
 install_postgresql_suit() {
-    check_dpkg_health
+    check_dpkg_health       || return 1
 
-    update_packages
+    update_packages         || return 1
 
-    install_client_profile
+    install_client_profile  || return 1
 
-    install_server_profile
+    install_server_profile  || return 1
 }
 
