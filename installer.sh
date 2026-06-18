@@ -7,6 +7,8 @@ source ./utils/distro.sh
 source ./utils/lib-logger.sh
 source ./utils/utils.sh
 
+source ./utils/run-module.sh
+
 
 # -------------------------------
 # Importing installation scripts
@@ -53,6 +55,7 @@ LOG_FILES[log]="${LOGS_DIR}/script.log"
 LOG_FILES[success]="${LOGS_DIR}/success.log"
 LOG_FILES[error]="${LOGS_DIR}/error.log"
 LOG_FILES[warn]="${LOGS_DIR}/warn.log"
+LOG_FILES[fail]="${LOGS_DIR}/fail.log"
 
 export LOG_FILES
 
@@ -74,6 +77,7 @@ fi
 export DISTRO
 
 
+
 main() {
     generate_log_files
 
@@ -82,35 +86,25 @@ main() {
     update_apt
     script_divider
 
-    install_system_utilities
-    script_divider
+    run_module "system utilities" install_system_utilities
 
-    install_zsh_suit
-    script_divider
+    run_module "ZSH" install_zsh_suit
 
-    install_postgresql_suit
-    script_divider
+    run_module "POSTGRESQL" install_postgresql_suit
 
-    install_dbeaver
-    script_divider
+    run_module "DBEAVER" install_dbeaver
 
-    install_browsers
-    script_divider
+    run_module "BROWSER" install_browsers
 
-    install_webstorm
-    script_divider
+    run_module "WEBSTORM" install_webstorm
 
-    install_pycharm_community
-    script_divider
+    run_module "PYCHARM" install_pycharm_community
 
-    install_vs_code
-    script_divider
+    run_module "VS CODE" install_vs_coder
 
-    install_golang
-    script_divider
+    run_module "GOLANG" install_golang
 
-    setup_python_dev_env
-    script_divider
+    run_module "PYTHON & PYTHON_DEV_ENV" setup_python_dev_env
 }
 
 main
