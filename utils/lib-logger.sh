@@ -52,6 +52,9 @@ _log() {
         echo "[$timestamp] [$level] $message" >> "${LOG_FILES[log]}"
         echo "[$timestamp] [$level] $message" >> "${LOG_FILES[warn]}"
         ;;
+    "FAIL")
+        echo "[$timestamp] [$level] $message" >> "${LOG_FILES[fail]}"
+        ;;
     esac
 }
 
@@ -60,10 +63,11 @@ _log() {
 # -----------------------------
 
 log_info()    { _log "INFO"    "$BLUE"   "$*"; }
-log_success() { _log "SUCCESS" "$GREEN"  "$*"; }
+log_success() { _log "SUCCESS" "$BGREEN" "$*"; }
 log_warn()    { _log "WARN"    "$YELLOW" "$*"; }
 log_error()   { _log "ERROR"   "$RED"    "$*"; }
 log_confirm() { _log "CONFIRM" "$CYAN"   "$*"; }
+log_fail()    { _log "FAIL"    "$BRED"   "$*"; }
 
 ## Optional: A debug function (can be enabled/disabled)
 #DEBUG_MODE=${DEBUG_MODE:-0}
