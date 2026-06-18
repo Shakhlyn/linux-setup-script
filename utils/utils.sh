@@ -15,8 +15,7 @@ generate_log_files() {
     # Check and create logs directory if it doesn't exist
     if [[ ! -d "$LOGS_DIR" ]]; then
         if ! mkdir -p "$LOGS_DIR"; then
-            log_info "Failed to create logs directory: $LOGS_DIR"
-            exit 1
+            error_exit "Failed to create logs directory: $LOGS_DIR"
         fi
         log_info "Created logs directory: $LOGS_DIR"
     else
@@ -26,8 +25,7 @@ generate_log_files() {
     # Initialize (truncate/create) each log file
     for log_file in "${LOG_FILES[@]}"; do
         if ! : > "$log_file"; then
-            log_info "Failed to initialize log file: $log_file"
-            exit 1
+            error_exit "Failed to initialize log file: $log_file"
         fi
         log_info "Ready: $log_file"
     done
@@ -76,6 +74,8 @@ update_apt() {
     local delay=5
     local count=0
 
+    log_info "Updating apt package indexes..."
+
     while ! sudo apt update -qq; do
         count=$((count + 1))
         if [[ $count -ge $retries ]]; then
@@ -84,7 +84,59 @@ update_apt() {
         log_error "apt update failed (attempt $count/$retries). Retrying in $delay seconds..."
         sleep $delay
     done
+
+    log_success "apt package indexes updated successfully.\n"
 }
+
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# update_dnf
+# Refreshes the dnf package index with retry logic.
+# ─────────────────────────────────────────────────────────────────────────────
+ 
+update_dnf() {
+    local retries=5
+    local delay=5
+    local count=0
+ 
+    log_info "Updating dnf package cache..."
+ 
+    while ! sudo dnf makecache -q; do
+        count=$((count + 1))
+        if [[ $count -ge $retries ]]; then
+            error_exit "'dnf makecache' failed after $retries attempts. Check your internet connection."
+        fi
+        log_error "dnf makecache failed (attempt $count/$retries). Retrying in ${delay}s..."
+        sleep "$delay"
+    done
+ 
+    log_success "dnf package cache updated.\n"
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# update_packages
+# Distro-aware wrapper. Call this from main.sh instead of update_apt directly.
+# ─────────────────────────────────────────────────────────────────────────────
+ 
+update_packages() {
+    case "${DISTRO:-}" in
+        ubuntu | lubuntu | pop)
+            update_apt
+            ;;
+        fedora)
+            update_dnf
+            ;;
+        *)
+            error_exit "update_packages: Unsupported distribution '${DISTRO:-unset}'."
+            ;;
+    esac
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# install_packages for ubuntu/pop os/ lubuntu
+# ─────────────────────────────────────────────────────────────────────────────
 
 
 apt_install() {
@@ -106,6 +158,79 @@ apt_install() {
     log_success "$pkg Installation complete\n"
 }
 
+apt_install_multiple() {
+    local failed=()
+
+    for pkg in "$@"; do
+        apt_install "$pkg" || failed+=("$pkg")
+    done
+
+    if [ ${#failed[@]} -gt 0 ]; then
+        log_error "Failed packages: ${failed[*]}"
+        return 1
+    fi
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# dnf_install <package> [binary_name] --> for fedora
+# ─────────────────────────────────────────────────────────────────────────────
+ 
+dnf_install() {
+    local pkg="$1"
+    local cmd="${2:-$1}"
+ 
+    if is_installed "$cmd"; then
+        log_confirm "'$pkg' is already installed. Skipping."
+        return 0
+    fi
+ 
+    log_info "Installing '$pkg' via dnf..."
+    if ! sudo dnf install -y "$pkg"; then
+        log_error "Failed to install '$pkg'. Check your internet connection and try again."
+        return 1
+    fi
+ 
+    log_success "'$pkg' installed successfully.\n"
+}
+ 
+
+dnf_install_multiple() {
+    local failed=()
+
+    for pkg in "$@"; do
+        dnf_install "$pkg" || failed+=("$pkg")
+    done
+
+    if [ ${#failed[@]} -gt 0 ]; then
+        log_error "Failed packages: ${failed[*]}"
+        return 1
+    fi
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Distro-aware wrapper. Call this from main.sh instead of update_apt directly.
+# ─────────────────────────────────────────────────────────────────────────────
+
+install_packages() {
+    case "${DISTRO:-}" in
+        ubuntu|lubuntu|pop)
+            apt_install_multiple "$@"
+            ;;
+        fedora)
+            dnf_install_multiple "$@"
+            ;;
+        *)
+            error_exit "install_packages: Unsupported distribution '${DISTRO:-unset}'."
+            ;;
+    esac
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Shell file
+# ─────────────────────────────────────────────────────────────────────────────
 
 get_shell_rc_file() {
     local shell_config=""
