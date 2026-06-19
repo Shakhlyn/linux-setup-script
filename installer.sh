@@ -7,6 +7,8 @@ source ./utils/distro.sh
 source ./utils/lib-logger.sh
 source ./utils/utils.sh
 
+source ./utils/run-module.sh
+
 
 # -------------------------------
 # Importing installation scripts
@@ -25,6 +27,9 @@ NOTE
 
 source ./system-core/system-utility.sh
 
+source ./db-clients/dbeaver-ce.sh
+source ./db-clients/postgresql-postgresql_client-and-utility.sh
+
 source ./browser.sh
 
 source ./ides/pycharm-community.sh
@@ -35,6 +40,8 @@ source ./prog-lang/golang.sh
 source ./prog-lang/python-dev/main.sh
 
 source ./utility-tools/zsh_shell.sh
+
+source ./containers-devops/docker-suite.sh
 
 
 #===================================================
@@ -50,6 +57,7 @@ LOG_FILES[log]="${LOGS_DIR}/script.log"
 LOG_FILES[success]="${LOGS_DIR}/success.log"
 LOG_FILES[error]="${LOGS_DIR}/error.log"
 LOG_FILES[warn]="${LOGS_DIR}/warn.log"
+LOG_FILES[fail]="${LOGS_DIR}/fail.log"
 
 export LOG_FILES
 
@@ -71,6 +79,7 @@ fi
 export DISTRO
 
 
+
 main() {
     generate_log_files
 
@@ -79,29 +88,27 @@ main() {
     update_apt
     script_divider
 
-    install_system_utilities
-    script_divider
+    run_module "system utilities" install_system_utilities
 
-    install_zsh_suit
-    script_divider
+    run_module "ZSH" install_zsh_suit
 
-    install_browsers
-    script_divider
+    run_module "POSTGRESQL" install_postgresql_suit
 
-    install_webstorm
-    script_divider
+    run_module "DBEAVER" install_dbeaver
 
-    install_pycharm_community
-    script_divider
+    run_module "BROWSER" install_browsers
 
-    install_vs_code
-    script_divider
+    run_module "WEBSTORM" install_webstorm
 
-    install_golang
-    script_divider
+    run_module "PYCHARM" install_pycharm_community
 
-    setup_python_dev_env
-    script_divider
+    run_module "VS CODE" install_vs_code
+
+    run_module "GOLANG" install_golang
+
+    run_module "PYTHON & PYTHON_DEV_ENV" setup_python_dev_env
+
+    run_module "DOCKER SUITE" install_docker_suite
 }
 
 main
