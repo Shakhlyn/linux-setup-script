@@ -1,39 +1,57 @@
 #!/bin/bash
+set -uo pipefail
+IFS=$'\n\t'
 
-# install_tmux_vim.sh
-# Installs tmux and vim on supported distributions.
+# Installs terminal utilities, i.e., tmux and vim, on supported distributions.
 # Supported: ubuntu, lubuntu, pop, fedora
-
-
 source ./utils/lib-logger.sh
 source ./utils/utils.sh
 
-set -uo pipefail
+# ─────────────────────────────────────────────────────────────────────────────
+# _tmux_install_deps_ubuntu
+# Installs tmux build dependencies on apt-based distributions.
+# ─────────────────────────────────────────────────────────────────────────────
 
+_tmux_install_deps_ubuntu() {
+    log_info "Installing tmux build dependencies...\n"
+    install_packages libncurses-dev libevent-dev || return 1
+    install_packages build-essential gcc || return 1
+}
 
 # ─────────────────────────────────────────────────────────────────────────────
-# TMUX
+# _tmux_install_deps_fedora
+# Installs tmux build dependencies on Fedora.
+# ─────────────────────────────────────────────────────────────────────────────
+
+_tmux_install_deps_fedora() {
+    log_info "Installing tmux build dependencies...\n"
+    install_packages libevent-devel ncurses-devel gcc || return 1
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# _tmux_install_deps
+# Dispatches tmux dependency installation for the active distribution.
 # ─────────────────────────────────────────────────────────────────────────────
 
 _tmux_install_deps() {
-    log_info "Installing tmux build dependencies...\n"
-
     case "${DISTRO:-}" in
         ubuntu | lubuntu | pop)
-            install_packages libncurses-dev libevent-dev				|| return 1
-            install_packages build-essential gcc		         		|| return 1
+            _tmux_install_deps_ubuntu
             ;;
         fedora)
-            install_packages libevent-devel ncurses-devel gcc 			|| return 1
+            _tmux_install_deps_fedora
             ;;
-        # *)
-        #     log_error "_tmux_install_deps: Unsupported distribution '${DISTRO:-unset}'."
-        #     return 1
-        #     ;;
+        *)
+            log_error "_tmux_install_deps: Unsupported distribution '${DISTRO:-unset}'."
+            return 1
+            ;;
     esac
 }
 
-
+# ─────────────────────────────────────────────────────────────────────────────
+# install_tmux
+# Installs tmux and verifies the binary is available.
+# ─────────────────────────────────────────────────────────────────────────────
 install_tmux() {
     log_info "======== tmux Installation ========\n"
 
@@ -44,10 +62,10 @@ install_tmux() {
 
     log_info "tmux not found. Starting installation...\n"
 
-    _tmux_install_deps || {
+    if ! _tmux_install_deps; then
         log_error "Failed to install tmux dependencies. Aborting tmux installation."
         return 1
-    }
+    fi
 
     log_info "Installing tmux...\n"
     if ! install_packages tmux; then
@@ -62,14 +80,13 @@ install_tmux() {
     log_info "Tip: 'tmux new -s <name>' starts a named session.\n"
 }
 
-
 # ─────────────────────────────────────────────────────────────────────────────
-# VIM
+# _is_full_vim_installed
+# Checks that vim exists and includes full syntax support.
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Ubuntu/Lubuntu/Pop ship vim-tiny by default. It registers in PATH as 'vim'
-# but silently drops syntax highlighting and plugin support. We must detect
-# this and replace it — not just check command -v vim.
+# but silently drops syntax highlighting and plugin support.
 _is_full_vim_installed() {
     if ! is_installed "vim" &>/dev/null; then
         return 1
@@ -84,20 +101,33 @@ _is_full_vim_installed() {
     return 1
 }
 
+# ─────────────────────────────────────────────────────────────────────────────
+# _remove_vim_tiny
+# Removes vim-tiny on apt-based distributions before installing full vim.
+# ─────────────────────────────────────────────────────────────────────────────
 
 _remove_vim_tiny() {
-    if dpkg -l vim-tiny &>/dev/null 2>&1; then
+    if [[ "${DISTRO:-}" != "ubuntu" && "${DISTRO:-}" != "lubuntu" && "${DISTRO:-}" != "pop" ]]; then
+        log_error "_remove_vim_tiny: Unsupported distribution '${DISTRO:-unset}'."
+        return 1
+    fi
+
+    if dpkg-query -W -f='${Status}' vim-tiny 2>/dev/null | grep -q "install ok installed"; then
         log_info "Removing vim-tiny to avoid dpkg conflicts...\n"
         if ! sudo apt remove -y vim-tiny; then
-            # Non-fatal — apt may still resolve the conflict on its own
+            # Non-fatal: apt may still resolve the conflict during full vim install.
             log_warn "Could not remove vim-tiny cleanly. apt will attempt to resolve."
         fi
     fi
 }
 
+# ─────────────────────────────────────────────────────────────────────────────
+# _vim_on_apt
+# Installs full vim on apt-based distributions.
+# ─────────────────────────────────────────────────────────────────────────────
 
 _vim_on_apt() {
-    _remove_vim_tiny
+    _remove_vim_tiny || return 1
 
     log_info "Installing full vim...\n"
     if ! install_packages vim; then
@@ -113,6 +143,10 @@ _vim_on_apt() {
     log_success "vim (full) installed successfully.\n"
 }
 
+# ─────────────────────────────────────────────────────────────────────────────
+# _vim_on_dnf
+# Installs vim-enhanced on Fedora.
+# ─────────────────────────────────────────────────────────────────────────────
 
 _vim_on_dnf() {
     # Fedora ships vim-minimal by default. vim-enhanced is the full-featured build.
@@ -132,7 +166,10 @@ _vim_on_dnf() {
     log_success "vim (enhanced) installed successfully.\n"
 }
 
-
+# ─────────────────────────────────────────────────────────────────────────────
+# install_vim
+# Installs full vim for the active distribution.
+# ─────────────────────────────────────────────────────────────────────────────
 install_vim() {
     log_info "======== vim Installation ========\n"
 
@@ -157,12 +194,14 @@ install_vim() {
     log_info "Launch vim by typing 'vim <filename>' in your terminal.\n"
 }
 
-
 # ─────────────────────────────────────────────────────────────────────────────
-# ENTRY POINT
+# install_terminal_tools
+# Installs terminal tools used by the development environment.
 # ─────────────────────────────────────────────────────────────────────────────
 
 install_terminal_tools() {
-    install_tmux    || return 1
-    install_vim     || return 1
+    install_tmux || return 1
+    install_vim || return 1
+
+    log_success "Terminal tools installed successfully.\n"
 }
