@@ -1,15 +1,9 @@
 #!/bin/bash
 
-# vim, tmux,
-
-#!/bin/bash
-
 # install_tmux_vim.sh
 # Installs tmux and vim on supported distributions.
 # Supported: ubuntu, lubuntu, pop, fedora
-#
-# Depends on: utils.sh (is_installed, pkg_install, error_exit)
-#             lib-logger.sh (log_*)
+
 
 source ./utils/lib-logger.sh
 source ./utils/utils.sh
@@ -26,15 +20,16 @@ _tmux_install_deps() {
 
     case "${DISTRO:-}" in
         ubuntu | lubuntu | pop)
-            pkg_install libevent-dev   libevent-dev   || return 1
-            pkg_install libncurses-dev libncurses-dev || return 1
-            pkg_install build-essential gcc           || return 1
+            install_packages libncurses-dev libevent-dev				|| return 1
+            install_packages build-essential gcc		         		|| return 1
             ;;
         fedora)
-            pkg_install libevent-devel libevent-devel || return 1
-            pkg_install ncurses-devel  ncurses-devel  || return 1
-            pkg_install gcc            gcc            || return 1
+            install_packages libevent-devel ncurses-devel gcc 			|| return 1
             ;;
+        # *)
+        #     log_error "_tmux_install_deps: Unsupported distribution '${DISTRO:-unset}'."
+        #     return 1
+        #     ;;
     esac
 }
 
@@ -55,16 +50,12 @@ install_tmux() {
     }
 
     log_info "Installing tmux...\n"
-    if ! pkg_install tmux; then
+    if ! install_packages tmux; then
         log_error "Failed to install tmux. Check your internet connection and try again."
         return 1
     fi
 
-    # Final verification — pkg_install is idempotent but doesn't re-verify PATH
-    if ! is_installed "tmux"; then
-        log_error "tmux was not found after installation. Something went wrong."
-        return 1
-    fi
+    verify_package "tmux" || return 1
 
     log_success "tmux installed successfully.\n"
     log_info "Launch tmux by typing 'tmux' in your terminal."
@@ -80,7 +71,7 @@ install_tmux() {
 # but silently drops syntax highlighting and plugin support. We must detect
 # this and replace it — not just check command -v vim.
 _is_full_vim_installed() {
-    if ! command -v vim &>/dev/null; then
+    if ! is_installed "vim" &>/dev/null; then
         return 1
     fi
 
@@ -109,7 +100,7 @@ _vim_on_apt() {
     _remove_vim_tiny
 
     log_info "Installing full vim...\n"
-    if ! apt_install vim; then
+    if ! install_packages vim; then
         log_error "apt failed to install vim."
         return 1
     fi
@@ -168,10 +159,10 @@ install_vim() {
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PUBLIC ENTRY POINT
+# ENTRY POINT
 # ─────────────────────────────────────────────────────────────────────────────
 
 install_terminal_tools() {
-    install_tmux
-    install_vim
+    install_tmux    || return 1
+    install_vim     || return 1
 }

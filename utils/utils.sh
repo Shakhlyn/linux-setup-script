@@ -229,6 +229,22 @@ install_packages() {
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# verify_package
+# Confirms a package or binary is available after installation.
+# ─────────────────────────────────────────────────────────────────────────────
+
+verify_package() {
+    local pkg="$1"
+
+    if ! is_installed "${pkg}"; then
+        log_error "${pkg} was not found after installation. Something went wrong."
+        return 1
+    fi
+
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Shell file
 # ─────────────────────────────────────────────────────────────────────────────
 
