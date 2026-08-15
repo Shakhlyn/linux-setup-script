@@ -1,25 +1,19 @@
 #!/bin/bash
 
+set -uo pipefail
 
 source ./utils/lib-logger.sh
 
-source ./prog-lang/python-dev/prerequisite-libs.sh
-source ./prog-lang/python-dev/pyenv.sh
-source ./prog-lang/python-dev/python.sh
+source ./prog-lang/python-dev/uv.sh
 
 
-set -uo pipefail
+# ─────────────────────────────────────────────────────────────────────────────
+# setup_python_dev_env
+# Python versions are not managed globally anymore. uv pulls whatever version
+# a project needs (`uv python install 3.12`, `uv venv --python 3.12`, or the
+# `requires-python` in a project's pyproject.toml), so uv is all we install.
+# ─────────────────────────────────────────────────────────────────────────────
 
 setup_python_dev_env() {
-    install_python_n_pyenv_pre_requisites
-    script_divider
-
-    if ! setup_pyenv; then
-        return 1
-    fi
-
-    if ! install_python; then
-        return 1
-    fi
+    setup_uv || return 1
 }
-

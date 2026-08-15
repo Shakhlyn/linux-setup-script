@@ -26,6 +26,7 @@ source ./utils/run-module.sh
 NOTE
 
 source ./system-core/system-utility.sh
+source ./system-core/core-utility.sh
 
 source ./db-clients/dbeaver-ce.sh
 source ./db-clients/postgresql-postgresql_client-and-utility.sh
@@ -92,6 +93,8 @@ main() {
 
     run_module "ZSH" install_zsh_suit
 
+    run_module "Vim & tmux" install_terminal_tools
+
     run_module "POSTGRESQL" install_postgresql_suit
 
     run_module "DBEAVER" install_dbeaver
@@ -106,7 +109,7 @@ main() {
 
     run_module "GOLANG" install_golang
 
-    run_module "PYTHON & PYTHON_DEV_ENV" setup_python_dev_env
+    run_module "PYTHON DEV ENV (uv)" setup_python_dev_env
 
     run_module "DOCKER SUITE" install_docker_suite
 }
