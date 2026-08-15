@@ -26,6 +26,7 @@ source ./utils/run-module.sh
 NOTE
 
 source ./system-core/system-utility.sh
+source ./system-core/core-utility.sh
 
 source ./db-clients/dbeaver-ce.sh
 source ./db-clients/postgresql-postgresql_client-and-utility.sh
@@ -91,6 +92,8 @@ main() {
     run_module "system utilities" install_system_utilities
 
     run_module "ZSH" install_zsh_suit
+
+    run_module "Vim & tmux" install_terminal_tools
 
     run_module "POSTGRESQL" install_postgresql_suit
 
