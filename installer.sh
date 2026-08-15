@@ -109,7 +109,7 @@ main() {
 
     run_module "GOLANG" install_golang
 
-    run_module "PYTHON & PYTHON_DEV_ENV" setup_python_dev_env
+    run_module "PYTHON DEV ENV (uv)" setup_python_dev_env
 
     run_module "DOCKER SUITE" install_docker_suite
 }
