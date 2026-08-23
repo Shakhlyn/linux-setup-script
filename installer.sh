@@ -86,7 +86,7 @@ main() {
 
     log_info "\nRefreshing the local list of available software packages from online repositories...\n"
 
-    update_apt
+    update_packages
     script_divider
 
     run_module "system utilities" install_system_utilities

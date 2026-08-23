@@ -186,6 +186,11 @@ logs/
 tmp/
 temp/
 
+# Unnecessary
+.agents/
+.codex/
+AGENTS.md
+
 # Security and Credentials
 # ------------------------
 .env
@@ -229,3 +234,4 @@ site/
 .sass-cache/
 .connect.lock
 .lock-wscript
+
